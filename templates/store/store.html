@@ -15,7 +15,12 @@
 <!-- ========================= SECTION PAGETOP ========================= -->
 <section class="section-pagetop bg">
 <div class="container">
-	<h2 class="title-page">Our Store</h2>
+	<h2 class="title-page">
+		{% if 'search' in request.path %}  
+		   Search Result
+		{% else %}
+		   Our Store
+		{% endif %}</h2>
 	
 </div> <!-- container //  -->
 </section>
@@ -39,10 +44,10 @@
 		<div class="filter-content collapse show" id="collapse_1" style="">
 			<div class="card-body">
 				
-				<ul class="list-menu">
+				<ul class="nav flex-column">
 					<li><a href="{% url "store" %}">ALL Products</a></li>
 					{% for category in links %}
-					    <li><a href="{{category.get_url}}">{{category.category_name}}</a></li>
+					    <li ><a class="nav-link"   href="{{category.get_url}}"><p >{{category.category_name}}</p></a></li>
 					{% endfor %}
 				</ul>
 
@@ -130,7 +135,7 @@
 
 <header class="border-bottom mb-4 pb-3">
 		<div class="form-inline">
-			<span class="mr-md-auto">{{product_count}} products are available </span>
+			<span class="mr-md-auto">{% if products %} {{product_count}} products are available {% else %}No result found!{% endif %} </span>
 			
 		</div>
 </header><!-- sect-heading -->
@@ -152,7 +157,15 @@
 						{% comment %} <del class="price-old">$1980</del> {% endcomment %}
 					</div> <!-- price-wrap.// -->
 				</div>
-				<a href="#" class="btn btn-block btn-primary">Add to cart </a>
+				{% if product.stock > 0 %}
+				 {% if in_cart %}
+				   <a href="{{product.get_url}}" class="btn  btn-primary"> <span class="text">Allready added to cart</span> <i class="fas fa-check"></i>  </a>
+		         {% else %}
+				   <a href="{{product.get_url}}" class="btn  btn-primary"> <span class="text">Details</span> <i class="fas fa-shopping-cart"></i>  </a>
+				 {% endif %}
+		        {% else %}
+		           <a href="{{product.get_url}}" class="btn  btn-secondary"> <span class="text">Out of stock</span> <i class="fas fa-shopping-cart"></i>  </a>
+		        {% endif %}
 			</figcaption>
 		</figure>
 	</div> <!-- col.// -->
@@ -162,13 +175,27 @@
 
 
 <nav class="mt-4" aria-label="Page navigation sample">
+  {% if products.has_other_pages %}
   <ul class="pagination">
-    <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-    <li class="page-item"><a class="page-link" href="#">2</a></li>
-    <li class="page-item"><a class="page-link" href="#">3</a></li>
-    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+    {% if products.has_previous %}
+    <li class="page-item"><a class="page-link" href="?page={{products.previous_page_number}}">Previous</a></li>
+	{% else %}
+	<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+    {% endif %}
+	{% for i in products.paginator.page_range %}
+	  {% if products.number == i %}
+         <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+	  {% else %}
+	     <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+	  {% endif %}	 
+    {% endfor %}
+	{% if products.has_next %}
+    <li class="page-item"><a class="page-link" href="?page={{products.next_page_number}}">Next</a></li>
+	{% else %}
+	<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+	{% endif %}
   </ul>
+  {% endif %}
 </nav>
 
 	</main> <!-- col.// -->
