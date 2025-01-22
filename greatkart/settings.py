@@ -138,3 +138,25 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #configuration of media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR /'media'
+
+from django.contrib.messages import constants as messages
+
+MESSAGE_TAGS = {
+    messages.ERROR: "dager",
+    
+}
+
+
+# smpt configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'fanr052@gmail.com'  # آدرس ایمیل شما
+EMAIL_HOST_PASSWORD = 'nqwvxdswscnjilge'       # رمز عبور شما یا App Password
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+
+   
+
+
