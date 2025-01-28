@@ -10,6 +10,7 @@ from accounts.admin import AccountAdmin
 from accounts.models import Account
 from carts.models import Cart, CartItem
 from carts.views import _cart_id
+from orders.models import Order
 from .forms import RegistrationForm
 from django.contrib import messages,auth
 from django.contrib.auth.decorators import login_required
@@ -112,6 +113,8 @@ def login(request):
                                     item.user = user
                                     item.save()
                    else:
+                       order = Order.objects.filter(user=request.user,is_ordered=False)
+                       order.delete()
                        cartold = cart_itemold.cart
                        cart = Cart.objects.get(cart_id=_cart_id(request))
                        is_cart_item_exists = CartItem.objects.filter(cart=cart).exists()

@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from carts.models import Cart, CartItem
+from orders.models import Order
 
 from store.models import Product, Variation
 from django.contrib.auth.decorators import login_required
@@ -69,11 +70,12 @@ def add_cart(request,product_id):
     
     try:
         if request.user.is_authenticated:
-            
+            order = Order.objects.filter(user=request.user,is_ordered=False)
+            order.delete()
             #get all open carts of user
             cart_items = CartItem.objects.filter(user=request.user,is_active=True)
 
-            cart_items_check = CartItem.objects.get(user=request.user,is_active=True)
+            cart_items_check = CartItem.objects.get(user=request.user,is_active=True,cart__status="open")
             
             
             for item in cart_items:
@@ -87,11 +89,13 @@ def add_cart(request,product_id):
             cart =Cart.objects.get(cart_id=_cart_id(request))
          #get the cart using th cart id returned in the session
     except (Cart.DoesNotExist,CartItem.DoesNotExist,ValueError):
+        print("kkkk")
         # return HttpResponse(e)
         cart = Cart.objects.create(
             cart_id = _cart_id(request)        )  
         cart.save()
     except MultipleObjectsReturned:
+        print("kk2kk")
         for item in cart_items:
                 if item.cart in user_open_carts :
                     continue
@@ -201,6 +205,8 @@ def remove_cart(request,product_id,cart_item_id):
          if request.user.is_authenticated:
           product=get_object_or_404(Product,id=product_id)
           cart_item = CartItem.objects.get(product=product,user=request.user,id=cart_item_id)
+          order = Order.objects.filter(user=request.user,is_ordered=False)
+          order.delete()
          else:   
           cart = Cart.objects.get(cart_id=_cart_id(request))
           product=get_object_or_404(Product,id=product_id)
@@ -221,6 +227,8 @@ def remove_cart_item(request,product_id,cart_item_id):
     if request.user.is_authenticated:
         # cart = CartItem.objects.get(user=request.user,cart__status="open")
         # cart = cart.cart.cart_id
+        order = Order.objects.filter(user=request.user,is_ordered=False)
+        order.delete()
         product = get_object_or_404(Product,id=product_id)
         cart_item=CartItem.objects.get(product=product,user=request.user,id=cart_item_id)
         cart = cart_item.cart
@@ -263,7 +271,8 @@ def checkout(request,total=0,quantity=0,cart_items=None):
     grand_total = 0
     try:
         if request.user.is_authenticated:
-            cart_items = CartItem.objects.filter(user=request.user,is_active=True)
+            cart = Cart.objects.filter()
+            cart_items = CartItem.objects.filter(user=request.user,is_active=True,cart__status="open")
         else:
           cart = Cart.objects.get(cart_id=_cart_id(request))
           cart_items = CartItem.objects.filter(cart=cart,is_active=True)
@@ -280,5 +289,6 @@ def checkout(request,total=0,quantity=0,cart_items=None):
         'cart_items' : cart_items,
         'tax' : tax,
         'grand_total':grand_total,
+        'user':request.user,
     }         
     return render(request,'store/checkout.html',context)                

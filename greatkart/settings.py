@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'category',
     'accounts',
     'store',
-    'carts'
+    'carts',
+    'orders'
 ]
 
 MIDDLEWARE = [
@@ -157,6 +158,12 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
+
+# SANDBOX MODE
+
+MERCHANT = "aa9f19e6-3863-4e57-be36-4dcb54dbd4a4"
+
+SANDBOX = True
    
 
 

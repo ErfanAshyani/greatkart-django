@@ -1,3 +1,5 @@
+
+
 """
 URL configuration for greatkart project.
 
@@ -14,20 +16,20 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-import statistics
-from django.conf import settings
-from django.contrib import admin
+
+
+
 from django.urls import include, path
-from greatkart import views
-from greatkart.settings import MEDIA_ROOT
-from django.conf.urls.static import static
+from orders import views
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('',views.home,name='home'),
-    path('store/',include('store.urls')),
-    path('cart/',include('carts.urls')),
-    path('accounts/',include('accounts.urls')),
-    path('orders/',include('orders.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('place_order/',views.place_order,name = 'place_order'),
+    path('payments/',views.payments,name = 'payments'),
+    #zarinpal
+    path('request/', views.send_request, name='request'),
+    path('verify/', views.verify , name='verify'),
+    path('payments/make_payment/',views.make_payment,name = 'make_payment'),
+    path('order_complete/',views.order_complete,name = 'order_complete'),
+    
+] 

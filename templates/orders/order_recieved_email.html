@@ -1,0 +1,10 @@
+{% autoescape off %}
+   {% comment %} #safe way to render html for sending django {% endcomment %}
+   Hi  {{user.first_name}},
+
+  Your Order Has Been Recieced 
+  Order Number : {{order.order_number}}
+
+
+
+{% endautoescape %}
