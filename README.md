@@ -1,3 +1,13 @@
+
+![image](https://github.com/user-attachments/assets/d2ad0562-5553-44cd-80f7-0297d0f2025f)
+
+
+
+
+
+
+
+
 ▎Python Django Ecommerce | Advanced Django Web App From Basic
 
 This project is an e-commerce website developed using the Django framework and the Python programming language. It is based on the course "Python Django Ecommerce | Advanced Django Web App From Basic" and includes various features that allow you to design and develop a custom web application.
