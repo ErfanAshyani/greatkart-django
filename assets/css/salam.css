@@ -1,0 +1,42 @@
+.rate > input {
+    display: none;
+}
+
+.rate {
+    display: inline-block;
+    border: 0;
+    position: relative;
+}
+
+.rate > label {
+    float: right;
+    font-size: 2rem; /* اندازه ستاره‌ها */
+    color: #ccc; /* رنگ پیش‌فرض */
+    cursor: pointer;
+}
+
+.rate > label.before {
+    display: inline-block;
+    font-family: FontAwesome;
+    margin: 0;
+    padding: 0.3rem .2rem; /* اصلاح padding */
+    cursor: pointer;
+}
+
+.rate .half:before {
+    content: "<i class="icon-star-half"></i>"; /* آیکون نیم ستاره */
+    position: absolute;
+    padding-right: 0;
+}
+
+input:checked ~ label,
+label:hover ~ label {
+    color: #ffb503; /* رنگ ستاره‌های انتخاب شده */
+}
+
+input:checked + label:hover,
+input:checked ~ label:hover,
+input:checked ~ label:hover ~ label,
+label:hover ~ input:checked ~ label {
+    color: #cc9001; /* رنگ ستاره‌های انتخاب شده هنگام hover */
+}
