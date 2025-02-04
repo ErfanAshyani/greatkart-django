@@ -2,13 +2,14 @@ from django.contrib import messages,auth
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from carts.models import CartItem
+from django.contrib.auth.decorators import login_required
 from carts.views import _cart_id
 from category.models import Category
-from orders.models import OrderProduct
+from orders.models import Order, OrderProduct
 from store.forms import ReviewForm
 from django.contrib import messages,auth
 
-from store.models import Product, ReviewRating
+from store.models import Product, ProductGallary, ReviewRating
 from django.core.paginator import Paginator
 from django.db.models import Q
 # Create your views here.
@@ -52,12 +53,14 @@ def product_detail(request,category_slug,product_slug):
     except OrderProduct.DoesNotExist:
         orderproduct = None
 
-    reviews = ReviewRating.objects.filter(product_id=single_product.id,status=True)    
+    reviews = ReviewRating.objects.filter(product_id=single_product.id,status=True) 
+    product_gallary = ProductGallary.objects.filter(product=single_product)   
     context = {
       'single_product' : single_product,
       'in_cart' : in_cart,
       'orderproduct' : orderproduct,
-      'reviews' : reviews  
+      'reviews' : reviews,
+      'product_gallary':product_gallary,  
     }    
     return render(request,'store/product-detail.html',context)
 
@@ -97,5 +100,11 @@ def submit_review(request,product_id):
                 data.save()
                 messages.success(request,'Thank you! Your review has been Submitted.')
                 return redirect(url)
+@login_required(login_url='login')  
+def my_orders(request):
+    orders = Order.objects.filter(user=request.user,is_ordered=True).order_by('-created_at')
+    context ={
+        'orders':orders,
 
-
+    }
+    return render(request,'accounts/my_orders.html',context)

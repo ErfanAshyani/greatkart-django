@@ -33,7 +33,22 @@
 			<a href="{{product.get_url}}" class="img-wrap"> <img src="/media/{{product.images}}"> </a>
 			<figcaption class="info-wrap">
 				<a href="{{product.get_url}}" class="title">{{product.product_name}}</a>
-				<div class="price mt-1">${{product.price}}</div> <!-- price-wrap.// -->
+				<div class="price mt-1">${{product.price}}</div> 
+				<!-- price-wrap.// -->
+				<div class="rating-star">
+					
+					{% comment %} <i class="fa-regular fa-star"></i>#empty
+				   <i class="fa-solid fa-star"></i>#full
+				   <i class="fa-solid fa-star-half-stroke"></i> #half {% endcomment %}
+				   
+					<i class="fa-{% if product.averageReview < 0.5 %}regular fa-star {% elif product.averageReview == 0.5 %}solid fa-star-half-stroke {% elif product.averageReview > 0.5 %}solid fa-star{% endif %}" aria-hidden=True></i>
+					<i class="fa-{% if product.averageReview < 1.5 %}regular fa-star {% elif product.averageReview == 1.5 %}solid fa-star-half-stroke {% elif product.averageReview > 1.5 %}solid fa-star{% endif %}" aria-hidden=True></i>
+					<i class="fa-{% if product.averageReview < 2.5 %}regular fa-star{% elif product.averageReview == 2.5 %}solid fa-star-half-stroke {% elif product.averageReview > 2.5 %}solid fa-star{% endif %}" aria-hidden=True></i>
+					<i class="fa-{% if product.averageReview < 3.5 %}regular fa-star{% elif product.averageReview == 3.5 %}solid fa-star-half-stroke {% elif product.averageReview > 3.5 %}solid fa-star{% endif %}" aria-hidden=True></i>
+					<i class="fa-{% if product.averageReview < 4.5 %}regular fa-star{% elif product.averageReview == 4.5 %}solid fa-star-half-stroke {% elif product.averageReview > 4.5 %}solid fa-star{% endif %}" aria-hidden=True></i>
+				  
+			
+			   </div> 
 			</figcaption>
 		</div>
 	</div> <!-- col.// -->
